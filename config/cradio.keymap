@@ -1,0 +1,723 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  // default: 600
+#include <behaviors/mouse_keys.dtsi>
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+//#include <dt-bindings/zmk/pointing.h>
+#include <dt-bindings/zmk/mouse.h>
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+#include "keys_de.h"
+#include "keys_it.h"
+#include "keys_us_international.h"
+#include <dt-bindings/zmk/ext_power.h>
+
+
+
+
+
+#define XXX &none
+#define ___ &trans
+
+#define BASEUSINT 0
+#define BASEUS 1
+#define BASEDE 2
+#define ANDROID 3
+#define BASEIT 4
+#define SYMUSINT 5
+#define SYMUS 6
+#define SYMDE 7
+#define SYMIT 8
+#define NAV 9
+#define NUMPAD 10
+#define ADJ 11
+#define GAME 12
+#define QWERTY 13
+
+#define arrowcombotime 10
+
+/ {
+
+            /*                KEY POSITIONS
+  ╭────────────────────╮ ╭────────────────────╮
+  │  0   1   2   3   4 │ │  5   6   7   8   9 │
+  │ 10  11  12  13  14 │ │ 15  16  17  18  19 │
+  │ 20  21  22  23  24 │ │ 25  26  27  28  29 │
+  ╰───────────╮ 30  31 │ │ 32  33 ╭───────────╯
+              ╰────────╯ ╰────────╯            */
+
+
+    combos {
+        compatible = "zmk,combos";
+            combo_five {
+            timeout-ms = <50>;
+            key-positions = <3 13>;
+            bindings = <&kp N5>;
+            layers = <BASEUSINT BASEUS BASEDE BASEIT SYMUSINT SYMUS SYMDE SYMIT>;
+        };
+            combo_sixde {
+            timeout-ms = <50>;
+            key-positions = <6 16>;
+            bindings = <&kp N6>;
+            layers = <BASEDE BASEIT SYMDE SYMIT>;
+        };
+            combo_sixus {
+            timeout-ms = <50>;
+            key-positions = <6 16>;
+            bindings = <&number6us>; // LS(6)->&
+            layers = <BASEUSINT BASEUS SYMUSINT SYMUS>;
+        };
+            combo_up {
+            timeout-ms = <arrowcombotime>;
+            key-positions = <11 12 13>;
+            bindings = <&kp UP>;
+        };
+            combo_down {
+            timeout-ms = <arrowcombotime>;
+            key-positions = <11 13>;
+            bindings = <&kp DOWN>;
+        };
+            combo_right {
+            timeout-ms = <arrowcombotime>;
+            key-positions = <12 13>;
+            bindings = <&kp RIGHT>;
+        };
+            combo_left {
+            timeout-ms = <arrowcombotime>;
+            key-positions = <11 12>;
+            bindings = <&kp LEFT>;
+        };
+
+        combo_uprhand {
+            timeout-ms = <arrowcombotime>;
+            key-positions = <16 17 18>;
+            bindings = <&kp UP>;
+        };
+            combo_downrhand {
+            timeout-ms = <arrowcombotime>;
+            key-positions = <16 18>;
+            bindings = <&kp DOWN>;
+        };
+            combo_rightrhand {
+            timeout-ms = <arrowcombotime>;
+            key-positions = <17 18>;
+            bindings = <&kp RIGHT>;
+        };
+            combo_leftrhand {
+            timeout-ms = <arrowcombotime>;
+            key-positions = <16 17>;
+            bindings = <&kp LEFT>;
+        };
+
+            combo_sqtus {
+            timeout-ms = <10>;
+            key-positions = <2 12>;
+            layers = <BASEUS SYMUS>;
+            bindings = <&kp SQT>;
+        };
+            combo_sqtusint {
+            timeout-ms = <10>;
+            key-positions = <2 12>;
+            layers  = <BASEUSINT SYMUSINT>;
+            bindings = <&sqtspace>;
+        };
+            combo_sqtde {
+            timeout-ms = <10>;
+            key-positions = <2 12>;
+            layers = <BASEDE SYMDE>;
+            bindings = <&kp DE_SQT>;
+        };
+            combo_sqtit {
+            timeout-ms = <10>;
+            key-positions = <2 12>;
+            layers = <BASEIT SYMIT>;
+            bindings = <&kp IT_SQT>;
+        };
+
+    };
+
+
+            //US base inherits from us int layer. Most stays except ' "
+            // instead of that we can also just copy all the stuff that could be the same likeh we do it in the italian layer.
+            // There we use some german numbers in SYMIT. Both approaches are possible and valid.
+            // "When configured as a then-layer, a layer's activation status is entirely controlled by the conditional layers"
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+        tri_layer {
+            if-layers = <BASEUS SYMUSINT>;
+            then-layer = <SYMUS>;
+        };
+    };
+
+
+
+//macros
+
+macros {
+            //[]
+    bracketde: bracketde {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings
+        = <&macro_tap &kp DE_LEFT_BRACKET &kp DE_RIGHT_BRACKET &kp LEFT>
+        ;
+    };
+            //{}
+    bracede: bracede {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings
+        = <&macro_tap &kp DE_LEFT_BRACE &kp DE_RIGHT_BRACE &kp LEFT>
+        ;
+    };
+            //()
+    parende: parende {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings
+        = <&macro_tap &kp DE_LEFT_PARENTHESIS &kp DE_RIGHT_PARENTHESIS &kp LEFT>
+        ;
+    };
+            //<>
+    lessgreaterde: lessgreaterde {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings
+        = <&macro_tap &kp DE_LESS_THAN &kp DE_GREATER_THAN &kp LEFT>
+        ;
+    };
+            //[]
+    bracketus: bracketus {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings
+        = <&macro_tap &kp LEFT_BRACKET &kp RIGHT_BRACKET &kp LEFT>
+        ;
+    };
+            //{}
+    braceus: braceus {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings
+        = <&macro_tap &kp LEFT_BRACE &kp RIGHT_BRACE &kp LEFT>
+        ;
+    };
+            //{}
+    braceit: braceit {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings
+        = <&macro_tap &kp IT_LEFT_BRACE &kp IT_RIGHT_BRACE &kp LEFT>
+        ;
+    };
+            //()
+    parenus: parenus {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings
+        = <&macro_tap &kp LEFT_PARENTHESIS &kp RIGHT_PARENTHESIS &kp LEFT>
+        ;
+    };
+            //[]
+    bracketit: bracketit {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings
+        = <&macro_tap &kp IT_LEFT_BRACKET &kp IT_RIGHT_BRACKET &kp LEFT>
+        ;
+    };
+            //<>
+    lessgreaterus: lessgreaterus {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings
+        = <&macro_tap &kp LT &kp GT &kp LEFT>
+        ;
+    };
+            // grave space`
+    gravespace: gravespace {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings 
+        = <&macro_tap &kp GRAVE &kp SPC> 
+        ;
+    };
+    sqtspace: sqtspace {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings 
+        = <&macro_tap &kp SQT &kp SPC> 
+        ;
+    };
+    dqtspace: dqtspace {
+    compatible = "zmk,behavior-macro";
+    #binding-cells = <0>;
+    bindings 
+        = <&macro_tap &kp DQT &kp SPC> 
+        ;
+    };
+
+
+};
+
+
+
+ 
+
+
+//mod morph
+ 
+    behaviors {
+        //home row mods
+
+        hm: hm {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            global-quick-tap;
+            require-prior-idle-ms = <125>;
+            bindings = <&kp>, <&kp>;
+        };
+        hmhold: hmhold {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&mo>, <&kp>;
+        };
+        //mod morph
+            // SL(.)->:
+        germanStyleDot: germanStyleDot {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp DOT>, <&kp COLON>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            // SL(,)->;
+        germanStyeComma: germanStyeComma {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp COMMA>, <&kp SEMICOLON>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+            // German numbers
+            //3'
+        number3de: number3de {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F3 N3>, <&kp DE_SQT>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            //4$
+        number4de: number4de {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F4 N4>, <&hm DE_EURO DE_DOLLAR>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            //8#
+        number8de: number8de {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F8 N8>, <&kp DE_HASH>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            //9?
+        number9de: number9de {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F9 N9>, <&kp DE_QMARK>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+            // US Numbers
+            //2"
+        number2us: number2us {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F2 N2>, <&dqtspace>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            //2"
+        number2usbase: number2usbase{
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F2 N2>, <&kp DQT>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            //3'
+        number3us: number3us {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F3 N3>, <&sqtspace>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            //3'
+        number3usbase: number3usbase{
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F3 N3>, <&kp SQT>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            //4$
+        number4us: number4us {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F4 N4>, <&hm EN_EURO DOLLAR>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            //6&
+        number6us: number6us {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F6 N6>, <&kp AMPS>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            //7/
+        number7us: number7us {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F7 N7>, <&kp SLASH>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            //8#
+        number8us: number8us {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F8 N8>, <&kp HASH>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+            //9?
+        number9us: number9us {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F9 N9>, <&kp QMARK>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            // 0=
+        number0us: number0us {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F10 N0>, <&kp EQUAL>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            // Italian shares some with german
+           //3'
+        number3it: number3it {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F3 N3>, <&kp IT_SQT >;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            //8#
+        number8it: number8it {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm F8 N8>, <&kp IT_HASH>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            // ´`
+        tickusint: tickusint {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp EN_ACUTE>, <&kp EN_GRAVE>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            // ~+ *
+        timesusint: timesusint {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&hm TILDE PLUS>, <&kp STAR>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+            // US
+            //{}
+        td_braceus: td_braceus {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&hm RIGHT_BRACE LEFT_BRACE>, <&braceus>;
+        };
+            //()
+        td_parenus: td_parenus {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&hm RIGHT_PARENTHESIS LEFT_PARENTHESIS>, <&parenus>;
+        };
+
+            //[
+        td_bracketus: td_bracketus {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&hm RIGHT_BRACKET LEFT_BRACKET>, <&bracketus>;
+        };
+
+            //<>
+        td_lessgreaterus: td_lessgreaterus {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&hm GT LT>, <&lessgreaterus>;
+        };
+
+            // German
+            // <>
+        td_lessgreaterde: td_lessgreaterde {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&hm DE_GT DE_LT>, <&lessgreaterde>;
+        };
+
+            //[]
+        td_bracketde: td_bracketde {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&hm DE_RIGHT_BRACKET DE_LEFT_BRACKET>, <&bracketde>;
+        };
+
+            //{}
+        td_bracede: td_bracede {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&hm DE_RIGHT_BRACE DE_LEFT_BRACE>, <&bracede>;
+        };
+            //()
+        td_parende: td_parende {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&hm DE_RIGHT_PARENTHESIS DE_LEFT_PARENTHESIS>, <&parende>;
+        };
+
+            // Italian is partly similar to german
+            //[]
+        td_bracketit: td_bracketit {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&hm IT_RIGHT_BRACKET IT_LEFT_BRACKET>, <&bracketit>;
+        };
+
+            //{}
+        td_braceit: td_braceit {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&hm IT_RIGHT_BRACE IT_LEFT_BRACE>, <&braceit>;
+        };
+
+
+    };
+
+
+
+
+
+
+
+
+  keymap {
+    compatible = "zmk,keymap";
+
+    baseusint_layer {
+      bindings = <
+        // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+                 &kp Q      &hm ESC W    &hm LSHIFT F    &kp P         &kp B             &kp J          &kp L        &kp U       &hm ESC Y  &kp LC(BSPC)
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+            &hm LCTRL A     &hm LGUI R    &hm RET S    &hm LALT T      &kp G         &kp M       &hm RSHFT N   &hm LALT E    &hm LGUI I    &hm RCTRL O
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+          &lt NUMPAD Z   &hm LALT X      &kp C      &hm LCTRL D   &hm LA(F4) V        &kp K       &hm RALT H    &germanStyeComma &germanStyleDot &kp BSPC
+        // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                       &hmhold NAV TAB   &kp LSHFT    &lt SYMUSINT SPC &kp LC(BSPC)
+        //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+      >;
+    };
+
+    baseus_layer {
+      bindings = <
+        // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+                 ___           ___           ___           ___           ___               ___           ___           ___           ___           ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+                 ___           ___           ___           ___           ___               ___           ___           ___           ___           ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+                 ___           ___           ___           ___           ___               ___           ___           ___           ___           ___
+        // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                           ___           ___        &lt SYMUSINT SPC     ___
+        //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+      >;
+    };
+
+    basede_layer {
+      bindings = <
+        // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+                 ___           ___           ___           ___           ___               ___           ___           ___       &hm ESC DE_Y      ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+                 ___           ___           ___           ___           ___               ___           ___           ___           ___           ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+            &lt NUMPAD DE_Z    ___           ___           ___           ___               ___           ___        &kp COMMA       &kp DOT        ___
+        // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                           ___           ___           &lt SYMDE SPC     ___
+        //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+      >;
+    };
+        
+    android_layer {
+      bindings = <
+        // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+                 ___      &hm F14 W     ___           ___           ___               ___           ___           ___           &hm F14 Y           ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+                 ___   &hm F15 R        ___          &hm F13 T           ___               ___           ___           ___     &hm F15 I       ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+                 ___            ___          ___           ___           ___               ___           &hm F15 H          ___           ___           ___
+        // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                           ___           ___               ___           ___
+        //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+      >;
+    };
+      
+    baseit_layer {
+      bindings = <
+        // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+                 ___           ___           ___           ___           ___               ___           ___           ___           ___           ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+                 ___           ___           ___           ___           ___               ___           ___           ___           ___           ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+                 ___           ___           ___           ___           ___               ___           ___        &kp COMMA       &kp DOT        ___
+        // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                           ___           ___           &lt SYMIT SPC     ___
+        //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+      >;
+    };
+      symusint_layer {
+      bindings = <
+        // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+               &kp AT    &kp EN_A_UMLAUT &kp EN_U_UMLAUT    ___      &kp CARET      &td_bracketus   &td_braceus     &td_parenus     &kp BACKSLASH     ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+               &hm F1 N1   &number2us    &number3us     &number4us   &kp EN_SHARP_S &td_lessgreaterus &number7us    &number8us   &number9us     &number0us
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+            &kp EN_O_UMLAUT &kp F11        &kp F12   &timesusint         ___          &tickusint   &hm PIPE MINUS     ___           ___           ___
+        // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                           ___           ___               ___          ___
+        //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+      >;
+    };
+
+      symus_layer {
+      bindings = <
+        // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+                 ___            ___          ___           ___           ___               ___           ___           ___           ___           ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+                 ___     &number2usbase &number3usbase     ___           ___               ___           ___           ___           ___           ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+                 ___            ___          ___           ___           ___               ___           ___           ___           ___           ___
+        // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                           ___           ___               ___          ___
+        //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+      >;
+    };
+    symde_layer {
+      bindings = <
+        // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+            &kp DE_AT   &kp DE_A_UMLAUT &kp DE_U_UMLAUT    ___      &kp DE_CARET   &td_bracketde &td_bracede &td_parende &kp DE_BACKSLASH    ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+               &hm F1 N1   &hm F2 N2    &number3de        &number4de    &kp DE_SZ   &td_lessgreaterde &hm F7 N7 &number8de   &number9de     &hm F10 N0
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+        &kp DE_O_UMLAUT      &kp F11       &kp F12  &hm DE_TILDE DE_PLUS ___          &kp DE_ACUTE &hm DE_PIPE DE_MINUS ___           ___           ___
+        // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                           ___           ___               ___          ___
+        //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+      >;
+    };
+
+    symit_layer {
+      bindings = <
+        // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+            &kp DE_AT   &kp IT_A_GRAVE  &kp IT_U_GRAVE  &kp IT_I_GRAVE  &kp IT_CARET &td_bracketit &td_braceit &td_parende  &kp IT_BACKSLASH     ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+               &hm F1 N1   &hm F2 N2    &number3it     &number4de    ___   &td_lessgreaterde   &hm F7 N7    &number8it    &number9de     &hm F10 N0
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+        &kp IT_O_GRAVE &hm IT_E_ACUTE IT_E_GRAVE &kp IT_C_CEDILLA &kp IT_PLUS ___          ___ &hm IT_PIPE IT_MINUS ___           ___           ___
+        // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                           ___           ___               ___          ___
+        //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+      >;
+    };
+
+
+
+    nav_layer {
+      bindings = <
+        // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+               &mo ADJ &hm C_PREV C_AC_BACK &kp PG_UP &hm C_NEXT C_AC_FORWARD &kp K_PLAY_PAUSE ___   &mkp LCLK    &mmv MOVE_UP    &mkp RCLK        ___           
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+                 ___        &kp HOME      &kp PG_DN      &kp END      &kp C_MUTE       &kp C_BRI_UP &mmv MOVE_LEFT &mmv MOVE_DOWN  &mmv MOVE_RIGHT ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+                 ___         &kp PSCRN     &kp DEL     &kp C_VOL_DN  &kp C_VOL_UP      &kp C_BRI_DN  &msc SCRL_UP      ___      &msc SCRL_DOWN     ___
+        // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                           ___           ___               ___           ___
+        //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+      >;
+    };
+
+
+    base_layer_num {
+      bindings = <
+        // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+               &kp F12      &hm F7 N7     &hm F8 N8    &hm F9 N9     &kp C_POWER          &tog ADJ       ___           ___           ___           ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+               &kp F11      &hm F4 N4     &hm F5 N5    &hm F6 N6     &hm F10 N0            ___           ___           ___           ___           ___
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+                 ___        &hm F1 N1     &hm F2 N2    &hm F3 N3         ___               ___           ___           ___           ___           ___
+        // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                           ___           ___               ___           ___
+        //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+      >;
+    };
+
+    adjust_layer {
+      bindings = <
+        // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+                 XXX       &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2   &out OUT_TOG           XXX           XXX           XXX           XXX           XXX
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+              &kp CAPS     &bt BT_SEL 3 &bt BT_SEL 4       XXX        &bt BT_CLR       &tog GAME         XXX           XXX           XXX           XXX
+        // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+            &sys_reset     &bootloader   &tog BASEDE    &tog ANDROID  &tog BASEUS     &tog BASEIT        XXX           XXX           XXX           XXX
+        // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                           XXX           XXX               XXX           XXX
+        //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+      >;
+    };
+game_layer {
+  bindings = <
+    // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
+            &kp ESC       &kp N1        &kp W         &kp N2         &kp F         &kp T             &kp Y         &kp U         &kp I        &kp O      
+    // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+          &kp LSHFT       &kp A        &kp S         &kp D         &kp F5         &kp G             &kp H         &kp J         &kp K        &kp L                 
+    // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
+           &kp LCTRL      &kp N3        &kp E         &kp N5         &kp F3              &kp B       &kp N         &kp M         &kp COMMA    &kp DOT   
+    // ╰─────────────┴─────────────┴─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┴─────────────┴─────────────╯
+                                                 &kp TAB      &kp SPACE        &tog GAME     &kp ENTER
+    //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
+  >;
+};
+
+
+  };
+};
